@@ -1,4 +1,4 @@
-Rewrite the README.md file with the following:
+
 - Project title: E-Waste & Occupational Health in India
 - Group: Group 10
 - Subject: Occupational & Environmental Health
@@ -8,4 +8,4 @@ Rewrite the README.md file with the following:
 - Features: India hotspot map, live health metrics, 
   before/after toggle, process visualization
 - Live site link: https://pradyodhp.github.io/ewastehealthindia
-- Team member names: (add your group names here)
+
