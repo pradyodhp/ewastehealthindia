@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>E-Waste & Occupational Health in India — Group 10</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --red:    #E24B4A;
+    --red-lt: #FCEBEB;
+    --green:  #1D9E75;
+    --green-lt: #E1F5EE;
+    --amber:  #BA7517;
+    --amber-lt: #FAEEDA;
+    --gray:   #5F5E5A;
+    --gray-lt:#F1EFE8;
+    --text:   #1a1a18;
+    --text2:  #5F5E5A;
+    --text3:  #888780;
+    --bg:     #ffffff;
+    --bg2:    #F7F6F2;
+    --border: rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg2); color: var(--text); }
+
+  /* NAV */
+  nav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  nav .brand { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); }
+  nav .badge { font-size: 11px; background: var(--gray-lt); color: var(--gray); padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+
+  /* HERO */
+  .hero {
+    background: var(--bg);
+    padding: 52px 32px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: 38px; line-height: 1.2; color: var(--text); max-width: 640px; margin: 0 auto 12px; }
+  .hero p  { font-size: 15px; color: var(--text2); max-width: 520px; margin: 0 auto 28px; line-height: 1.6; }
+
+  /* TOGGLE */
+  .toggle-wrap { display: flex; justify-content: center; gap: 0; margin-bottom: 0; }
+  .toggle-btn {
+    padding: 12px 36px; font-size: 14px; font-weight: 500;
+    border: 1.5px solid var(--border); cursor: pointer;
+    background: var(--bg2); color: var(--text2);
+    transition: all 0.3s; font-family: 'DM Sans', sans-serif;
+  }
+  .toggle-btn:first-child { border-radius: 8px 0 0 8px; border-right: none; }
+  .toggle-btn:last-child  { border-radius: 0 8px 8px 0; }
+  .toggle-btn.active-before { background: #FAECE7; border-color: #D85A30; color: #712B13; }
+  .toggle-btn.active-after  { background: #E1F5EE; border-color: #1D9E75; color: #085041; }
+
+  /* MAIN LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media(max-width:700px){ .grid2 { grid-template-columns: 1fr; } }
+
+  /* CARDS */
+  .card {
+    background: var(--bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+  .card-title { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; font-weight: 500; }
+
+  /* MAP */
+  .map-wrap { position: relative; }
+  #india-map { width: 100%; max-width: 280px; display: block; margin: 0 auto; }
+  .hotspot-list { margin-top: 12px; }
+  .hotspot-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.2s; border-radius: 6px; padding: 8px 6px;
+  }
+  .hotspot-row:last-child { border-bottom: none; }
+  .hotspot-row:hover { background: var(--bg2); }
+  .hdot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .hname { font-size: 13px; font-weight: 500; flex: 1; }
+  .hcount { font-size: 11px; color: var(--text3); }
+  .htag { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
+  .htag-danger { background: #FCEBEB; color: #A32D2D; }
+  .htag-safe   { background: #E1F5EE; color: #085041; }
+
+  /* METRICS */
+  .metrics-stack { display: flex; flex-direction: column; gap: 12px; }
+  .metric-card {
+    background: var(--bg2); border-radius: 10px;
+    border: 1px solid var(--border); padding: 14px 16px;
+  }
+  .metric-label { font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+  .metric-val { font-size: 22px; font-weight: 600; transition: color 0.5s; }
+  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .bar-track { height: 6px; background: var(--border); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width 0.7s ease, background 0.5s; }
+
+  /* PROCESS SECTION */
+  .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  @media(max-width:600px){ .process-grid { grid-template-columns: 1fr 1fr; } }
+  .process-step {
+    border-radius: 10px; border: 1px solid; padding: 14px 12px;
+    transition: background 0.4s, border-color 0.4s;
+  }
+  .step-icon { font-size: 20px; margin-bottom: 8px; }
+  .step-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .step-desc { font-size: 11px; line-height: 1.5; color: var(--text2); }
+
+  /* STATS BAR */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+  @media(max-width:600px){ .stats-row { grid-template-columns: 1fr 1fr; } }
+  .stat-card { background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); padding: 18px 16px; text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); }
+  .stat-desc { font-size: 12px; color: var(--text2); margin-top: 6px; line-height: 1.4; }
+
+  /* WORKER ICONS */
+  .worker-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .wicon {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; border: 2px solid; transition: all 0.4s;
+  }
+
+  /* DISCUSSION SECTION */
+  .discuss-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  @media(max-width:600px){ .discuss-grid { grid-template-columns: 1fr; } }
+  .discuss-card { background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; }
+  .discuss-icon { font-size: 28px; margin-bottom: 10px; }
+  .discuss-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .discuss-body { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .discuss-stat { font-size: 20px; font-weight: 600; color: var(--red); margin-top: 10px; }
+
+  /* STATE INDICATOR */
+  .state-banner {
+    text-align: center; padding: 10px;
+    font-size: 13px; font-weight: 500;
+    border-radius: 8px; margin-bottom: 16px;
+    transition: all 0.4s;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 24px;
+    font-size: 12px; color: var(--text3);
+    border-top: 1px solid var(--border);
+    background: var(--bg); margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">E-Waste Health India</span>
+  <span class="badge">Group 10 · Occupational &amp; Environmental Health</span>
+</nav>
+
+<div class="hero">
+  <h1>E-Waste Recycling &amp; Occupational Health in India</h1>
+  <p>India generates 3.2 million tonnes of e-waste annually. 95% is handled by the informal sector — with devastating health consequences. Toggle between states to see the difference.</p>
+  <div class="toggle-wrap">
+    <button class="toggle-btn active-before" id="btn-before" onclick="setState('before')">&#9888; Before — Informal recycling</button>
+    <button class="toggle-btn" id="btn-after" onclick="setState('after')">&#10003; After — Formal recycling plant</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STATE BANNER -->
+  <div class="state-banner" id="state-banner" style="background:#FAECE7;color:#712B13;border:1px solid #D85A30;">
+    Currently showing: BEFORE state — Informal, unregulated e-waste recycling in India
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">3.2M</div>
+      <div class="stat-desc">Tonnes of e-waste generated in India per year</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">95%</div>
+      <div class="stat-desc">Handled by the unregulated informal sector</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4.5×</div>
+      <div class="stat-desc">Higher cancer risk among informal e-waste workers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">#3</div>
+      <div class="stat-desc">India is the world's 3rd largest e-waste producer</div>
+    </div>
+  </div>
+
+  <!-- MAP + METRICS -->
+  <div class="grid2">
+
+    <!-- MAP PANEL -->
+    <div class="card">
+      <div class="card-title">E-waste hotspot zones · India</div>
+      <svg id="india-map" viewBox="0 0 260 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Simplified India outline -->
+        <path d="M95 12 L125 10 L148 22 L160 42 L167 62 L170 85 L164 108 L158 128 L163 148 L158 168 L148 188 L138 208 L128 228 L115 252 L104 266 L94 252 L83 232 L73 212 L63 192 L54 172 L48 152 L44 132 L41 112 L38 92 L42 72 L48 52 L56 35 L70 20 Z"
+          fill="#F7F6F2" stroke="#B4B2A9" stroke-width="1.5"/>
+        <!-- Northeast region -->
+        <path d="M163 108 L175 100 L188 108 L185 125 L170 128 L158 128 Z" fill="#F7F6F2" stroke="#B4B2A9" stroke-width="1"/>
+        <!-- Gujarat peninsula -->
+        <path d="M42 112 L30 120 L22 138 L28 148 L44 132 Z" fill="#F7F6F2" stroke="#B4B2A9" stroke-width="1"/>
+
+        <!-- Hotspot: Delhi -->
+        <g id="hs-delhi" style="cursor:pointer" onclick="selectCity('delhi')">
+          <circle cx="98" cy="72" r="8" fill="#E24B4A" opacity="0.2"/>
+          <circle cx="98" cy="72" r="5" id="dot-delhi" fill="#E24B4A"/>
+          <text x="108" y="76" font-size="9" fill="#2C2C2A" font-family="DM Sans,sans-serif" font-weight="500">Delhi</text>
+        </g>
+        <!-- Hotspot: Mumbai -->
+        <g id="hs-mumbai" style="cursor:pointer" onclick="selectCity('mumbai')">
+          <circle cx="65" cy="158" r="8" fill="#E24B4A" opacity="0.2"/>
+          <circle cx="65" cy="158" r="5" id="dot-mumbai" fill="#E24B4A"/>
+          <text x="75" y="162" font-size="9" fill="#2C2C2A" font-family="DM Sans,sans-serif" font-weight="500">Mumbai</text>
+        </g>
+        <!-- Hotspot: Bangalore -->
+        <g id="hs-bangalore" style="cursor:pointer" onclick="selectCity('bangalore')">
+          <circle cx="95" cy="215" r="8" fill="#E24B4A" opacity="0.2"/>
+          <circle cx="95" cy="215" r="5" id="dot-blr" fill="#E24B4A"/>
+          <text x="105" y="219" font-size="9" fill="#2C2C2A" font-family="DM Sans,sans-serif" font-weight="500">Bangalore</text>
+        </g>
+        <!-- Hotspot: Kolkata -->
+        <g id="hs-kolkata" style="cursor:pointer" onclick="selectCity('kolkata')">
+          <circle cx="148" cy="120" r="8" fill="#E24B4A" opacity="0.2"/>
+          <circle cx="148" cy="120" r="5" id="dot-kol" fill="#E24B4A"/>
+          <text x="158" y="124" font-size="9" fill="#2C2C2A" font-family="DM Sans,sans-serif" font-weight="500">Kolkata</text>
+        </g>
+        <!-- Hotspot: Moradabad -->
+        <g id="hs-moradabad" style="cursor:pointer" onclick="selectCity('moradabad')">
+          <circle cx="108" cy="88" r="6" fill="#BA7517" opacity="0.2"/>
+          <circle cx="108" cy="88" r="4" fill="#BA7517"/>
+          <text x="116" y="92" font-size="8" fill="#2C2C2A" font-family="DM Sans,sans-serif">Moradabad</text>
+        </g>
+
+        <!-- Legend -->
+        <circle cx="20" cy="280" r="4" fill="#E24B4A"/>
+        <text x="28" y="284" font-size="8" fill="#5F5E5A" font-family="DM Sans,sans-serif">Major hub</text>
+        <circle cx="100" cy="280" r="4" fill="#BA7517"/>
+        <text x="108" y="284" font-size="8" fill="#5F5E5A" font-family="DM Sans,sans-serif">Secondary hub</text>
+      </svg>
+
+      <!-- Hotspot list -->
+      <div class="hotspot-list" id="hotspot-list">
+        <div class="hotspot-row" onclick="selectCity('delhi')">
+          <div class="hdot" style="background:#E24B4A"></div>
+          <span class="hname">Seelampur, Delhi</span>
+          <span class="hcount">~50,000 workers</span>
+          <span class="htag htag-danger" id="tag-delhi">High risk</span>
+        </div>
+        <div class="hotspot-row" onclick="selectCity('mumbai')">
+          <div class="hdot" style="background:#E24B4A"></div>
+          <span class="hname">Dharavi, Mumbai</span>
+          <span class="hcount">~25,000 workers</span>
+          <span class="htag htag-danger" id="tag-mumbai">High risk</span>
+        </div>
+        <div class="hotspot-row" onclick="selectCity('bangalore')">
+          <div class="hdot" style="background:#E24B4A"></div>
+          <span class="hname">Bangalore</span>
+          <span class="hcount">~18,000 workers</span>
+          <span class="htag htag-danger" id="tag-blr">High risk</span>
+        </div>
+        <div class="hotspot-row" onclick="selectCity('kolkata')">
+          <div class="hdot" style="background:#E24B4A"></div>
+          <span class="hname">Kolkata</span>
+          <span class="hcount">~12,000 workers</span>
+          <span class="htag htag-danger" id="tag-kol">High risk</span>
+        </div>
+        <div class="hotspot-row" onclick="selectCity('moradabad')">
+          <div class="hdot" style="background:#BA7517"></div>
+          <span class="hname">Moradabad, UP</span>
+          <span class="hcount">~8,000 workers</span>
+          <span class="htag htag-danger" id="tag-mor">High risk</span>
+        </div>
+      </div>
+
+      <!-- City info popup -->
+      <div id="city-popup" style="display:none;margin-top:12px;background:var(--bg2);border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px" id="popup-name"></div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5" id="popup-note"></div>
+      </div>
+    </div>
+
+    <!-- METRICS PANEL -->
+    <div class="metrics-stack">
+      <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:2px;font-weight:500">Live health metrics</div>
+
+      <div class="metric-card">
+        <div class="metric-label">Air quality · PM2.5 (µg/m³)</div>
+        <div class="metric-val" id="m-air" style="color:#E24B4A">340 µg/m³</div>
+        <div class="bar-track"><div class="bar-fill" id="bar-air" style="width:90%;background:#E24B4A"></div></div>
+        <div class="metric-sub" id="lbl-air">WHO safe limit is 15 µg/m³ — currently 22× over the limit</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">PPE coverage</div>
+        <div class="metric-val" id="m-ppe" style="color:#E24B4A">4%</div>
+        <div class="bar-track"><div class="bar-fill" id="bar-ppe" style="width:4%;background:#E24B4A"></div></div>
+        <div class="metric-sub" id="lbl-ppe">Almost no workers use gloves, masks, or protective suits</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Child labour rate</div>
+        <div class="metric-val" id="m-child" style="color:#E24B4A">~35%</div>
+        <div class="bar-track"><div class="bar-fill" id="bar-child" style="width:35%;background:#E24B4A"></div></div>
+        <div class="metric-sub" id="lbl-child">Children under 14 directly handling toxic e-waste materials</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Disease risk index</div>
+        <div class="metric-val" id="m-risk" style="color:#E24B4A">Critical</div>
+        <div class="bar-track"><div class="bar-fill" id="bar-risk" style="width:88%;background:#E24B4A"></div></div>
+        <div class="metric-sub" id="lbl-risk">Lead, mercury &amp; cadmium exposure — linked to organ damage and cancer</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Workforce composition</div>
+        <div class="worker-row" id="worker-row"></div>
+        <div class="metric-sub" id="lbl-workers" style="margin-top:8px">Mix of adults and children, no PPE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS SECTION -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">Recycling process — how e-waste is handled</div>
+    <div class="process-grid" id="process-grid"></div>
+  </div>
+
+  <!-- DISCUSSION CARDS -->
+  <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;font-weight:500">Key issues to discuss</div>
+  <div class="discuss-grid">
+    <div class="discuss-card">
+      <div class="discuss-icon">👶</div>
+      <div class="discuss-title">Child labour</div>
+      <div class="discuss-body">In informal e-waste zones like Seelampur, children as young as 6 work alongside adults. They manually dismantle circuit boards, burn cables, and handle acid baths — with no protection and no education. Their developing bodies are far more vulnerable to lead and mercury poisoning.</div>
+      <div class="discuss-stat">~35% of workers are minors</div>
+    </div>
+    <div class="discuss-card">
+      <div class="discuss-icon">🧤</div>
+      <div class="discuss-title">Lack of PPE</div>
+      <div class="discuss-body">Personal Protective Equipment — gloves, N95 masks, protective suits, goggles — is almost entirely absent in the informal sector. Workers perform acid leaching with bare hands. The cost of PPE (~₹500/month) is cited as the barrier, yet the lifetime medical costs of toxic exposure run into lakhs.</div>
+      <div class="discuss-stat">Less than 4% PPE usage</div>
+    </div>
+    <div class="discuss-card">
+      <div class="discuss-icon">💨</div>
+      <div class="discuss-title">Air quality exposure</div>
+      <div class="discuss-body">Open burning of cables and acid leaching in open air releases dioxins, furans, lead particles, and brominated flame retardants directly into the surrounding neighbourhood. PM2.5 levels in e-waste zones are 15–22× the WHO safe limit. Residents within 1km radius are also affected.</div>
+      <div class="discuss-stat">PM2.5 up to 340 µg/m³</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Group 10 · Occupational &amp; Environmental Health in India &nbsp;|&nbsp; E-Waste Recycling Prototype &nbsp;|&nbsp; Data sources: WHO, MoEFCC India, ASSOCHAM E-Waste Report 2023
+</footer>
+
+<script>
+const DATA = {
+  before: {
+    banner: { text: 'Currently showing: BEFORE state — Informal, unregulated e-waste recycling in India', bg: '#FAECE7', color: '#712B13', border: '#D85A30' },
+    air:   { val: '340 µg/m³', pct: 90,  color: '#E24B4A', sub: 'WHO safe limit is 15 µg/m³ — currently 22× over the limit' },
+    ppe:   { val: '4%',        pct: 4,   color: '#E24B4A', sub: 'Almost no workers use gloves, masks, or protective suits' },
+    child: { val: '~35%',      pct: 35,  color: '#E24B4A', sub: 'Children under 14 directly handling toxic e-waste materials' },
+    risk:  { val: 'Critical',  pct: 88,  color: '#E24B4A', sub: 'Lead, mercury & cadmium — linked to organ damage and cancer' },
+    workers: [
+      { child: true,  ppe: false },
+      { child: true,  ppe: false },
+      { child: false, ppe: false },
+      { child: false, ppe: false },
+      { child: false, ppe: false },
+    ],
+    workerSub: 'Mix of adults and children — no PPE on any worker',
+    steps: [
+      { icon: '🗑️', title: 'Waste collection',   desc: 'Picked from streets and dumps, no sorting or categorisation', bad: true },
+      { icon: '🔨', title: 'Manual dismantling', desc: 'Bare hands, hammers — no protective gear whatsoever', bad: true },
+      { icon: '⚗️', title: 'Open acid leaching', desc: 'Acid poured in open air to extract gold and copper', bad: true },
+      { icon: '🔥', title: 'Open cable burning', desc: 'Cables burned outdoors — toxic dioxins released directly', bad: true },
+      { icon: '☠️', title: 'No waste disposal',  desc: 'Acid and ash dumped into nearby soil and water sources', bad: true },
+      { icon: '🚫', title: 'No regulation',       desc: 'No permits, no health checks, no worker rights enforced', bad: true },
+    ],
+    tagClass: 'htag-danger',
+    tagText: 'High risk',
+  },
+  after: {
+    banner: { text: 'Currently showing: AFTER state — Formal, regulated recycling plant with PPE and safety controls', bg: '#E1F5EE', color: '#085041', border: '#1D9E75' },
+    air:   { val: '12 µg/m³', pct: 8,   color: '#1D9E75', sub: 'Below WHO limit — sealed process chambers with filtered exhaust' },
+    ppe:   { val: '100%',     pct: 100, color: '#1D9E75', sub: 'Full PPE mandatory: gloves, N95 masks, suits, goggles for all workers' },
+    child: { val: '0%',       pct: 0,   color: '#1D9E75', sub: 'Adults only — minimum age 18 strictly enforced by law' },
+    risk:  { val: 'Low',      pct: 12,  color: '#1D9E75', sub: 'Controlled exposure levels — regular health monitoring in place' },
+    workers: [
+      { child: false, ppe: true },
+      { child: false, ppe: true },
+      { child: false, ppe: true },
+      { child: false, ppe: true },
+      { child: false, ppe: true },
+    ],
+    workerSub: 'Adults only — all workers equipped with full PPE',
+    steps: [
+      { icon: '📦', title: 'Certified collection',   desc: 'Authorised drop-off points and licensed pickup services', bad: false },
+      { icon: '🔧', title: 'Mechanical shredding',   desc: 'Enclosed machines with operators safely behind barriers', bad: false },
+      { icon: '🧪', title: 'Contained acid process', desc: 'Sealed chambers — fumes extracted and filtered before release', bad: false },
+      { icon: '🏭', title: 'Thermal treatment',      desc: 'Controlled furnaces with emission scrubbers installed', bad: false },
+      { icon: '🌱', title: 'Safe waste disposal',    desc: 'Hazardous residue sent to licensed treatment and disposal sites', bad: false },
+      { icon: '📋', title: 'EPR compliance',          desc: 'Licensed facility, regular inspections, health monitoring for workers', bad: false },
+    ],
+    tagClass: 'htag-safe',
+    tagText: 'Regulated',
+  }
+};
+
+const CITIES = {
+  delhi:     { name: 'Seelampur, Delhi',  note: "Asia's largest informal e-waste market. ~50,000 workers, up to 40% are minors. Blood lead levels in children here are 10× the safe limit." },
+  mumbai:    { name: 'Dharavi, Mumbai',   note: 'Dense urban recycling hub inside one of Asia\'s largest slums. Soil lead contamination documented up to 200m from recycling sites.' },
+  bangalore: { name: 'Bangalore',         note: "IT capital of India — high volume of discarded electronics. Growing formal sector but majority still informal. MoEFCC registered facilities expanding." },
+  kolkata:   { name: 'Kolkata',           note: 'Major eastern India e-waste hub. Hooghly river contamination from acid dumping is a documented environmental crisis.' },
+  moradabad: { name: 'Moradabad, UP',     note: 'Known for metal recycling. Workers here also process e-waste informally alongside brass casting — compounding toxic exposure.' },
+};
+
+let currentState = 'before';
+
+function setState(s) {
+  currentState = s;
+  const d = DATA[s];
+
+  // buttons
+  document.getElementById('btn-before').className = 'toggle-btn' + (s === 'before' ? ' active-before' : '');
+  document.getElementById('btn-after').className  = 'toggle-btn' + (s === 'after'  ? ' active-after'  : '');
+
+  // banner
+  const b = d.banner;
+  const banner = document.getElementById('state-banner');
+  banner.style.background = b.bg;
+  banner.style.color = b.color;
+  banner.style.borderColor = b.border;
+  banner.style.border = '1px solid ' + b.border;
+  banner.textContent = b.text;
+
+  // metrics
+  setMetric('air',   d.air);
+  setMetric('ppe',   d.ppe);
+  setMetric('child', d.child);
+  setMetric('risk',  d.risk);
+
+  // workers
+  renderWorkers(d.workers, d.workerSub);
+
+  // process steps
+  renderProcess(d.steps);
+
+  // hotspot tags
+  const tags = ['delhi','mumbai','blr','kol','mor'];
+  tags.forEach(function(id) {
+    const el = document.getElementById('tag-' + id);
+    if (el) {
+      el.className = 'htag ' + d.tagClass;
+      el.textContent = d.tagText;
+    }
+  });
+}
+
+function setMetric(id, m) {
+  document.getElementById('m-'   + id).textContent = m.val;
+  document.getElementById('m-'   + id).style.color = m.color;
+  document.getElementById('bar-' + id).style.width = m.pct + '%';
+  document.getElementById('bar-' + id).style.background = m.color;
+  document.getElementById('lbl-' + id).textContent = m.sub;
+}
+
+function renderWorkers(ws, sub) {
+  const row = document.getElementById('worker-row');
+  row.innerHTML = ws.map(function(w) {
+    var bg  = w.child ? '#FCEBEB' : (w.ppe ? '#E1F5EE' : '#FAEEDA');
+    var bc  = w.child ? '#E24B4A' : (w.ppe ? '#1D9E75' : '#BA7517');
+    var ico = w.child ? '👦'      : (w.ppe ? '👷'      : '🧑');
+    return '<div class="wicon" style="background:' + bg + ';border-color:' + bc + '">' + ico + '</div>';
+  }).join('');
+  document.getElementById('lbl-workers').textContent = sub;
+}
+
+function renderProcess(steps) {
+  const grid = document.getElementById('process-grid');
+  grid.innerHTML = steps.map(function(s) {
+    var bg = s.bad ? '#FAECE7' : '#E1F5EE';
+    var bc = s.bad ? '#D85A30' : '#1D9E75';
+    var tc = s.bad ? '#712B13' : '#085041';
+    return '<div class="process-step" style="background:' + bg + ';border-color:' + bc + '">'
+      + '<div class="step-icon">' + s.icon + '</div>'
+      + '<div class="step-title" style="color:' + tc + '">' + s.title + '</div>'
+      + '<div class="step-desc">' + s.desc + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function selectCity(id) {
+  const c = CITIES[id];
+  if (!c) return;
+  const popup = document.getElementById('city-popup');
+  document.getElementById('popup-name').textContent = c.name;
+  document.getElementById('popup-note').textContent = c.note;
+  popup.style.display = 'block';
+}
+
+// init
+renderWorkers(DATA.before.workers, DATA.before.workerSub);
+renderProcess(DATA.before.steps);
+</script>
+</body>
+</html>
